@@ -1,0 +1,48 @@
+# General
+.DS_Store
+Thumbs.db
+*.log
+logs
+*.log.npm
+*.log.yarn
+*.log.pnpm
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+!.env.example
+
+# Next.js (Frontend)
+.next/
+out/
+build/
+dist/
+.vercel/
+*.tsbuildinfo
+
+# Node.js (Backend)
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+test-results/
+playwright-report/
+blob-report/
