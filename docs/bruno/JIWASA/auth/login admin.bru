@@ -1,0 +1,29 @@
+meta {
+  name: login admin
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:4000/api/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "admin@jiwasa.com",
+    "password": "12345678"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setVar("token", res.body.token);
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

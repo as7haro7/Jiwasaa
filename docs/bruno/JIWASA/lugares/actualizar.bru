@@ -1,0 +1,22 @@
+meta {
+  name: Actualizar Lugar
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:4000/api/lugares/PLACE_ID_HERE
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "Las Salteñas de la Esquina (Renovado)",
+    "rangoPrecios": "medio"
+  }
+}

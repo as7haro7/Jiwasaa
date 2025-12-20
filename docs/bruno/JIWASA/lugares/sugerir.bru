@@ -1,0 +1,30 @@
+meta {
+  name: Sugerir Lugar
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:4000/api/lugares/sugerencias
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "Puesto de Antaño",
+    "tipo": "callejero",
+    "direccion": "Plaza Murillo",
+    "zona": "Centro",
+    "coordenadas": {
+      "type": "Point",
+      "coordinates": [-68.1300, -16.5000]
+    },
+    "descripcion": "Venden buenos sandwichs",
+    "horario": "09:00 - 18:00"
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar Favorito
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:4000/api/favoritos/lugar/PLACE_ID_HERE
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

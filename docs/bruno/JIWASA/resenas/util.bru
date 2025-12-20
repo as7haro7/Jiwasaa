@@ -1,0 +1,15 @@
+meta {
+  name: Marcar Util
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:4000/api/resenas/REVIEW_ID_HERE/util
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

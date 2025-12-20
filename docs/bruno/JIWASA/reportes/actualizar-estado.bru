@@ -1,0 +1,21 @@
+meta {
+  name: Actualizar Estado Reporte
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:4000/api/reportes/REPORT_ID_HERE
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "estado": "resuelto"
+  }
+}

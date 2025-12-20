@@ -1,0 +1,25 @@
+meta {
+  name: Crear Plato
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:4000/api/lugares/PLACE_ID_HERE/platos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: token-bearer
+}
+
+body:json {
+  {
+    "nombre": "Salteña de Pollo",
+    "precio": 8,
+    "descripcion": "Jugosa y picante",
+    "categoria": "snack",
+    "etiquetas": ["picante", "pollo"]
+  }
+}

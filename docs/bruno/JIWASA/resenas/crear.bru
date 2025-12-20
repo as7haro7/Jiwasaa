@@ -1,0 +1,22 @@
+meta {
+  name: Crear Reseña
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:4000/api/lugares/PLACE_ID_HERE/resenas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "rating": 5,
+    "comentario": "Excelente comida, muy recomendado!"
+  }
+}

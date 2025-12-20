@@ -1,0 +1,32 @@
+meta {
+  name: Crear Lugar
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:4000/api/lugares
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "Las Salteñas de la Esquina",
+    "tipo": "callejero",
+    "direccion": "Calle Murillo 123",
+    "zona": "Centro",
+    "coordenadas": {
+      "type": "Point",
+      "coordinates": [-68.1193, -16.4897]
+    },
+    "descripcion": "Las mejores salteñas de la zona.",
+    "tiposComida": ["salteñas", "bebidas"],
+    "rangoPrecios": "bajo",
+    "horario": "Lun-Dom 08:00-12:00"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Agregar Favorito
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:4000/api/favoritos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "lugarId": "PLACE_ID_HERE"
+  }
+}

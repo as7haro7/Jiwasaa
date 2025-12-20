@@ -1,0 +1,27 @@
+meta {
+  name: actualizar datos de perfil
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:4000/api/users/me
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NDVkOTA3ZjcxZGRlMGFmYjVjN2VjMiIsImlhdCI6MTc2NjE4NjMyNywiZXhwIjoxNzY4Nzc4MzI3fQ._m9oYMPImQW_am03yIBm4mcQG8FlOHylkqREnsfxHEc
+}
+
+body:json {
+  {
+    "preferenciasComida": ["Pique Macho", "Chairo"],
+    "password": "123456"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
