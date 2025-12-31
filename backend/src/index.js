@@ -11,10 +11,13 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import promotionRoutes from "./routes/promotionRoutes.js";
 import favoriteRoutes from "./routes/favoriteRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
+import sponsoredRoutes from "./routes/sponsoredRoutes.js";
 
 import uploadRoutes from "./routes/uploadRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 
 dotenv.config();
 const app = express();
@@ -39,7 +42,11 @@ app.use("/api/resenas", reviewRoutes);
 app.use("/api/promociones", promotionRoutes);
 app.use("/api/favoritos", favoriteRoutes);
 app.use("/api/reportes", reportRoutes);
+app.use("/api/sponsored", sponsoredRoutes);
 app.use("/api/upload", uploadRoutes);
+
+// Swagger Documentation
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Static Folder for Uploads
 // Go up one level from src to root, then uploads

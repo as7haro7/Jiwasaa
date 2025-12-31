@@ -69,3 +69,13 @@ Base URL: `/api`
 | `POST` | `/reportes`     | Reportar un lugar o reseña   | Privado |
 | `GET`  | `/reportes`     | Ver reportes                 | Admin   |
 | `PUT`  | `/reportes/:id` | Actualizar estado de reporte | Admin   |
+
+## 9. Ubicaciones Patrocinadas (`/sponsored`)
+
+| Método   | Endpoint         | Descripción                        | Acceso  |
+| -------- | ---------------- | ---------------------------------- | ------- |
+| `GET`    | `/sponsored`     | Listar ubicaciones activas         | Público |
+| `POST`   | `/sponsored`     | Crear nueva ubicación patrocinada  | Admin   |
+| `GET`    | `/sponsored/:id` | Ver detalles de ubicación          | Admin   |
+| `PUT`    | `/sponsored/:id` | Actualizar ubicación (fechas/peso) | Admin   |
+| `DELETE` | `/sponsored/:id` | Desactivar/Eliminar ubicación      | Admin   |

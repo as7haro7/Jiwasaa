@@ -5,16 +5,94 @@ import { protect, admin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router({ mergeParams: true });
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Promotions
+ *   description: Promotion management
+ */
+
+/**
+ * @swagger
+ * /promociones:
+ *   get:
+ *     summary: Get all promotions
+ *     tags: [Promotions]
+ *     responses:
+ *       200:
+ *         description: List of promotions
+ * 
+ * /lugares/{lugarId}/promociones:
+ *   post:
+ *     summary: Create promotion for a place (Admin)
+ *     tags: [Promotions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: lugarId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - titulo
+ *               - descuentoPorcentaje
+ *             properties:
+ *               titulo:
+ *                 type: string
+ *               descripcion:
+ *                 type: string
+ *               precioPromo:
+ *                 type: number
+ *               descuentoPorcentaje:
+ *                 type: number
+ *               fechaInicio:
+ *                 type: string
+ *                 format: date-time
+ *               fechaFin:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       201:
+ *         description: Promotion created
+ */
 router.route("/")
     .get(getPromotions)
     .post(protect, admin, createPromotion);
 
-router.get("/activas", getPromotions); // Might need separate controller function or logic in getPromotions to handle /activas without params
+router.get("/activas", getPromotions); 
 
-// But wait, mergeParams: true means if I mount this on /api/lugares/:lugarId/promociones, params.lugarId exists.
-// If I mount it on /api/promociones, params.lugarId is undefined.
-// "activas" logic in controller handles undefined lugarId.
-
+/**
+ * @swagger
+ * /promociones/{id}:
+ *   put:
+ *     summary: Update promotion (Admin)
+ *     tags: [Promotions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Promotion updated
+ */
 router.route("/:id")
     .put(protect, admin, updatePromotion);
 

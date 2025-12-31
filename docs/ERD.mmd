@@ -1,0 +1,136 @@
+---
+config:
+  layout: elk
+title: JIWASA
+---
+erDiagram    
+    USER {
+        ObjectId _id PK ""  
+        String nombre  ""  
+        String email  ""  
+        String password  ""  
+        String googleId  ""  
+        String authProvider  "local/google"  
+        String biografia  ""  
+        String telefono  ""  
+        String rol  "usuario/admin"  
+        String fotoPerfil  ""  
+        String[] preferenciasComida  ""  
+        Boolean esPropietario  ""  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    PLACE {
+        ObjectId _id PK ""  
+        ObjectId propietarioId FK ""  
+        String nombre  ""  
+        String tipo  "callejero/mercado/restaurante/cafe"  
+        String direccion  ""  
+        String zona  ""  
+        Object coordenadas  "GeoJSON Point [long, lat]"  
+        String descripcion  ""  
+        String[] tiposComida  ""  
+        String rangoPrecios  "bajo/medio/alto"  
+        Object horario  "estructura de horarios por día"  
+        String[] fotos  ""  
+        Number promedioRating  ""  
+        Number cantidadResenas  ""  
+        String estado  "activo/cerrado/pendiente"  
+        Boolean destacado  ""  
+        String nivelVisibilidad  "normal/premium/patrocinado"  
+        String telefonoContacto  ""  
+        String emailContacto  ""  
+        String sitioWeb  ""  
+        Object redesSociales  "urls instagram/facebook/etc"  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    DISH {
+        ObjectId _id PK ""  
+        ObjectId lugarId FK ""  
+        String nombre  ""  
+        String descripcion  ""  
+        Number precio  ""  
+        String categoria  ""  
+        String[] etiquetas  ""  
+        Boolean disponible  ""  
+        Boolean destacado  ""  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    REVIEW {
+        ObjectId _id PK ""  
+        ObjectId usuarioId FK ""  
+        ObjectId lugarId FK ""  
+        Number rating  ""  
+        String comentario  ""  
+        String[] fotos  ""  
+        Number util  ""  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    FAVORITE {
+        ObjectId _id PK ""  
+        ObjectId usuarioId FK ""  
+        ObjectId lugarId FK ""  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    PROMOTION {
+        ObjectId _id PK ""  
+        ObjectId lugarId FK ""  
+        ObjectId platoId FK ""  
+        String titulo  ""  
+        String descripcion  ""  
+        Number precioPromo  ""  
+        Number descuentoPorcentaje  ""  
+        String tipo  "descuento/combo/2x1/evento"  
+        Date fechaInicio  ""  
+        Date fechaFin  ""  
+        Boolean activa  ""  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    REPORT {
+        ObjectId _id PK ""  
+        String tipo  "lugar/review"  
+        ObjectId lugarId FK ""  
+        ObjectId reviewId FK ""  
+        ObjectId usuarioId FK ""  
+        String motivo  ""  
+        String estado  "pendiente/resuelto"  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    SPONSORED_PLACEMENT {
+        ObjectId _id PK ""  
+        ObjectId lugarId FK ""  
+        String posicion  "home_top/list_result/map_banner"  
+        Date fechaInicio  ""  
+        Date fechaFin  ""  
+        Boolean activo  ""  
+        Number peso  "prioridad 1-10"  
+        Date createdAt  ""  
+        Date updatedAt  ""  
+    }
+
+    USER||--o{REVIEW:"writes"
+    USER||--o{FAVORITE:"likes"
+    USER||--o{REPORT:"creates"
+    USER||--o{PLACE:"owns"
+    PLACE||--|{DISH:"offers"
+    PLACE||--o{REVIEW:"has"
+    PLACE||--o{FAVORITE:"is liked by"
+    PLACE||--o{PROMOTION:"has"
+    PLACE||--o{REPORT:"reported in"
+    PLACE||--o{SPONSORED_PLACEMENT:"has sponsored spots"
+    DISH||--o{PROMOTION:"included in"
+    REVIEW||--o{REPORT:"reported in"
+ 

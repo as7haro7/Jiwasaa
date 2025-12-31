@@ -2,16 +2,23 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 import api from "@/lib/api";
-import { Search, Star, Clock, MapPin, ArrowRight } from "lucide-react";
+import { Search, Star, Clock, MapPin, ArrowRight, Map as MapIcon, List } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { OfferCard } from "@/components/features/home/OfferCard";
 import { PlaceListCard } from "@/components/features/home/PlaceListCard";
 import { BookedCard } from "@/components/features/home/BookedCard";
 import { NewPlaceCard } from "@/components/features/home/NewPlaceCard";
+
+// Dynamic import for Map to avoid SSR issues with Leaflet
+const Map = dynamic(() => import("@/components/features/Map"), {
+  loading: () => <div className="h-96 w-full bg-zinc-100 animate-pulse rounded-lg flex items-center justify-center text-zinc-400">Cargando mapa...</div>,
+  ssr: false
+});
 
 interface Place {
   _id: string;
@@ -20,12 +27,16 @@ interface Place {
   zona: string;
   fotos: string[];
   promedioRating: number;
+  coordenadas: {
+    coordinates: [number, number];
+  };
 }
 
 export default function Home() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showMap, setShowMap] = useState(false);
 
   const categories = [
     { name: "Restaurantes", image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=80", color: "bg-orange-100" },
@@ -49,13 +60,12 @@ export default function Home() {
     fetchPlaces();
   }, []);
 
-  const featuredPlaces = places.slice(0, 4); // Just show top 4 for "Featured"
+  const featuredPlaces = places.slice(0, 4); 
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero / Search Section */}
       <div className="relative w-full bg-black text-white py-24 px-4 flex flex-col items-center justify-center text-center space-y-8">
-          {/* Background Pattern or subtle image overlay could go here */}
           <div className="absolute inset-0 bg-[url('/baner.jpg')] opacity-20 bg-cover bg-center" />
           
           <div className="relative z-10 space-y-4 max-w-3xl">
@@ -68,18 +78,15 @@ export default function Home() {
           </div>
           
           <div className="relative z-10 w-full max-w-4xl bg-white rounded-sm p-1.5 flex flex-col md:flex-row items-center shadow-xl divide-y md:divide-y-0 md:divide-x divide-zinc-200">
-              
-              {/* Location Input */}
               <div className="flex-1 flex items-center w-full md:w-auto px-4 h-12">
                   <MapPin className="h-5 w-5 text-zinc-500 shrink-0" />
                   <Input 
                     className="border-none shadow-none focus-visible:ring-0 text-black text-base placeholder:text-zinc-500 w-full"
                     placeholder="Cerca de mí"
-                    defaultValue="Cerca de mí" // Placeholder value for now
+                    defaultValue="Cerca de mí" 
                   />
               </div>
 
-              {/* Keyword Input */}
               <div className="flex-[1.5] flex items-center w-full md:w-auto px-4 h-12">
                   <Search className="h-5 w-5 text-zinc-500 shrink-0" />
                   <Input 
@@ -98,6 +105,26 @@ export default function Home() {
 
       <div className="container mx-auto px-4 py-12 space-y-16">
         
+        {/* Toggle Map View for Mobile / Highlight for Desktop */}
+         <section>
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Explora La Paz</h2>
+                <Button 
+                    variant="outline" 
+                    onClick={() => setShowMap(!showMap)}
+                    className="flex items-center gap-2"
+                >
+                    {showMap ? <><List className="h-4 w-4"/> Ver Lista</> : <><MapIcon className="h-4 w-4"/> Ver en Mapa</>}
+                </Button>
+            </div>
+            
+            <div className={cn("transition-all duration-300 ease-in-out", showMap ? "block" : "hidden md:block")}>
+                 <div className="h-[400px] md:h-[500px] w-full rounded-xl overflow-hidden shadow-sm border border-zinc-200">
+                    <Map places={places} />
+                 </div>
+            </div>
+         </section>
+
         {/* Categories Section */}
         <section>
             <h2 className="text-2xl font-bold mb-6">Explora por categorías</h2>
@@ -113,7 +140,7 @@ export default function Home() {
             </div>
         </section>
 
-        {/* Nuestras mejores ofertas - (Mocked via slice) */}
+        {/* Nuestras mejores ofertas */}
         <section>
              <h2 className="text-2xl font-bold mb-2">Nuestras mejores ofertas</h2>
              <p className="text-zinc-500 mb-6">Descuentos exclusivos de hasta el 50%</p>
@@ -153,9 +180,8 @@ export default function Home() {
              </div>}
         </section>
         
-        {/* Top 100 La Paz (Madrid adapted) */}
+        {/* Top 100 La Paz */}
          <section className="bg-black text-white rounded-2xl p-8 md:p-12 relative overflow-hidden">
-             {/* Abstract BG */}
              <div className="absolute inset-0 bg-gradient-to-r from-black via-black to-transparent z-10" />
              <div className="absolute inset-0 bg-[url('/baner.jpg')] bg-cover bg-center opacity-40" />
              
@@ -165,7 +191,7 @@ export default function Home() {
                  </div>
                  <h2 className="text-4xl font-bold">Top 100 La Paz</h2>
                  <p className="text-zinc-300 text-lg">
-                     Descubre los restaurantes que definen la gastronomía paceña este año. Una lista exclusiva curada por expertos y calificada por comensales.
+                     Descubre los restaurantes que definen la gastronomía paceña este año.
                  </p>
                  <Button className="bg-white text-black hover:bg-zinc-200 h-12 px-8 rounded-sm text-base font-medium">
                      Ver la lista completa
@@ -189,7 +215,7 @@ export default function Home() {
             <div className="space-y-4 max-w-lg text-center md:text-left">
                 <h2 className="text-3xl font-bold">¿Eres propietario de un restaurante?</h2>
                 <p className="text-zinc-600 text-lg">
-                    Únete a JIWASA y haz que miles de personas descubran tu sabor. Gestiona reservas, recibe opiniones y crece tu negocio.
+                    Únete a JIWASA y haz que miles de personas descubran tu sabor.
                 </p>
                 <Button className="bg-black text-white hover:bg-zinc-800 h-12 px-8 rounded-full text-base">
                     Registra tu negocio
@@ -202,3 +228,4 @@ export default function Home() {
     </div>
   );
 }
+

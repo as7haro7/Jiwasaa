@@ -31,6 +31,7 @@ export const getPlaces = async (req, res) => {
 
         const count = await Place.countDocuments(filter);
         const places = await Place.find(filter)
+            .sort({ destacado: -1, promedioRating: -1 }) // Show featured and high rated first
             .limit(pageSize)
             .skip(pageSize * (page - 1));
 
@@ -63,6 +64,7 @@ export const getPlaceById = async (req, res) => {
 export const createPlace = async (req, res) => {
     try {
         const {
+            propietarioId, // passed from frontend or middleware (assumed attached to req.body for now, usually req.user._id)
             nombre,
             tipo,
             direccion,
@@ -73,9 +75,19 @@ export const createPlace = async (req, res) => {
             rangoPrecios,
             horario,
             fotos,
+            destacado,
+            nivelVisibilidad,
+            telefonoContacto,
+            emailContacto,
+            sitioWeb,
+            redesSociales,
         } = req.body;
 
         const place = new Place({
+            // If not provided in body, maybe use req.user._id if we want to enforce current user as owner?
+            // For admin created places, we might want to assign a specific owner or the admin themselves.
+            // keeping flexibility for now.
+            propietarioId: propietarioId || req.user?._id, 
             nombre,
             tipo,
             direccion,
@@ -86,6 +98,12 @@ export const createPlace = async (req, res) => {
             rangoPrecios,
             horario,
             fotos,
+            destacado,
+            nivelVisibilidad,
+            telefonoContacto,
+            emailContacto,
+            sitioWeb,
+            redesSociales,
         });
 
         const createdPlace = await place.save();
@@ -114,6 +132,12 @@ export const updatePlace = async (req, res) => {
             place.horario = req.body.horario || place.horario;
             place.fotos = req.body.fotos || place.fotos;
             place.estado = req.body.estado || place.estado;
+            place.destacado = req.body.destacado !== undefined ? req.body.destacado : place.destacado;
+            place.nivelVisibilidad = req.body.nivelVisibilidad || place.nivelVisibilidad;
+            place.telefonoContacto = req.body.telefonoContacto || place.telefonoContacto;
+            place.emailContacto = req.body.emailContacto || place.emailContacto;
+            place.sitioWeb = req.body.sitioWeb || place.sitioWeb;
+            place.redesSociales = req.body.redesSociales || place.redesSociales;
 
             const updatedPlace = await place.save();
             res.json(updatedPlace);

@@ -1,6 +1,53 @@
 
 import mongoose from "mongoose";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Dish:
+ *       type: object
+ *       required:
+ *         - lugarId
+ *         - nombre
+ *         - precio
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the dish
+ *         lugarId:
+ *           type: string
+ *           description: The place ID this dish belongs to
+ *         nombre:
+ *           type: string
+ *           description: Name of the dish
+ *         descripcion:
+ *           type: string
+ *           description: Description of the dish
+ *         precio:
+ *           type: number
+ *           description: Price in Bolivianos
+ *         categoria:
+ *           type: string
+ *           description: Category (desayuno, almuerzo, etc)
+ *         etiquetas:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Tags (picante, vegano, etc)
+ *         disponible:
+ *           type: boolean
+ *           default: true
+ *         destacado:
+ *           type: boolean
+ *           default: false
+ *       example:
+ *         nombre: Salteña de Carne
+ *         precio: 8
+ *         categoria: desayuno
+ *         destacado: true
+ */
+
 const dishSchema = new mongoose.Schema(
     {
         lugarId: {
@@ -31,6 +78,10 @@ const dishSchema = new mongoose.Schema(
         disponible: {
             type: Boolean,
             default: true,
+        },
+        destacado: {
+            type: Boolean,
+            default: false,
         },
     },
     {

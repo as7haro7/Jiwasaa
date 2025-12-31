@@ -33,11 +33,17 @@ Representa a un usuario de la app (paceño o turista).
 
 - `nombre`: String, requerido.
 - `email`: String, requerido, único.
-- `passwordHash`: String, requerido.
+- `password`: String, requerido (si es local).
+- `googleId`: String, opcional.
+- `authProvider`: String, enum: `["local", "google"]`.
+- `biografia`: String, opcional.
+- `telefono`: String, opcional.
 - `rol`: String, enum: `["usuario", "admin"]`, por defecto `"usuario"`.
 - `fotoPerfil`: String, opcional (URL).
 - `preferenciasComida`: [String], opcional (ej. `["salteñas", "anticuchos"]`).
-- `fechaRegistro`: Date, por defecto ahora.
+- `esPropietario`: Boolean, por defecto `false`.
+- `createdAt`: Date, por defecto ahora.
+- `updatedAt`: Date.
 
 **Relaciones:**
 
@@ -49,6 +55,7 @@ Representa un punto gastronómico de La Paz.
 
 **Campos sugeridos:**
 
+- `propietarioId`: ObjectId → referencia a `Usuario`, requerido.
 - `nombre`: String, requerido.
 - `tipo`: String, enum: `["callejero", "mercado", "restaurante", "café", "otro"]`, requerido.[9][10]
 - `direccion`: String, requerido (ej. “Calle Comercio esquina Yanacocha”).
@@ -60,12 +67,19 @@ Representa un punto gastronómico de La Paz.
 - `descripcion`: String, opcional.
 - `tiposComida`: [String], opcional (ej. `["salteñas", "api", "anticuchos"]`).[4][3]
 - `rangoPrecios`: String, enum: `["bajo", "medio", "alto"]` o similar.
-- `horario`: String (ej. “Lun–Sáb 07:00–22:00”).
+- `horario`: Objecto estructurado de horarios por día.
 - `fotos`: [String] (URLs).
 - `promedioRating`: Number, por defecto 0.
 - `cantidadResenas`: Number, por defecto 0.
 - `estado`: String, enum: `["activo", "cerrado", "pendiente"]`, por defecto `"activo"`.
-- `fechaCreacion`: Date.
+- `destacado`: Boolean, por defecto `false`.
+- `nivelVisibilidad`: String, enum: `["normal", "premium", "patrocinado"]`.
+- `telefonoContacto`: String, opcional.
+- `emailContacto`: String, opcional.
+- `sitioWeb`: String, opcional.
+- `redesSociales`: Object (URLs instagram, facebook, etc).
+- `createdAt`: Date.
+- `updatedAt`: Date.
 
 **Relaciones:**
 
@@ -84,6 +98,9 @@ Permite detallar qué se vende en cada lugar.
 - `categoria`: String (ej. “desayuno”, “almuerzo”, “snack”).[11]
 - `etiquetas`: [String] (ej. “picante”, “típico paceño”, “vegano”).[4]
 - `disponible`: Boolean, por defecto `true`.
+- `destacado`: Boolean, default `false`.
+- `createdAt`: Date.
+- `updatedAt`: Date.
 
 ### 3.4. Reseña
 
@@ -138,6 +155,21 @@ Para moderación (lugar o reseña reportados).
 - `motivo`: String.
 - `estado`: String, enum: `["pendiente", "resuelto"]`.
 - `fecha`: Date.
+
+### 3.8. Ubicación Patrocinada (SponsoredPlacement)
+
+Gestión de espacios destacados en la app.
+
+**Campos:**
+
+- `lugarId`: ObjectId → `Lugar`, requerido.
+- `posicion`: String, enum: `["home_top", "list_result", "map_banner"]`.
+- `fechaInicio`: Date.
+- `fechaFin`: Date.
+- `activo`: Boolean.
+- `peso`: Number (prioridad 1-10).
+- `createdAt`: Date.
+- `updatedAt`: Date.
 
 ---
 

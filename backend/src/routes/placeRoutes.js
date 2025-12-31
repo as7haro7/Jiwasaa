@@ -27,13 +27,136 @@ router.use("/:lugarId/reviews", reviewRoutes);
 router.use("/:lugarId/resenas", reviewRoutes);
 router.use("/:lugarId/promociones", promotionRoutes);
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Places
+ *   description: Place management endpoints
+ */
+
+/**
+ * @swagger
+ * /lugares:
+ *   get:
+ *     summary: Get all places
+ *     tags: [Places]
+ *     parameters:
+ *       - in: query
+ *         name: keyword
+ *         schema:
+ *           type: string
+ *         description: Search term (name, address, food type)
+ *       - in: query
+ *         name: zona
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: tipo
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: pageNumber
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: List of places
+ *   post:
+ *     summary: Create a new place (Admin only)
+ *     tags: [Places]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Place'
+ *     responses:
+ *       201:
+ *         description: Place created
+ *       401:
+ *         description: Not authorized
+ */
 router.route("/")
     .get(getPlaces)
     .post(protect, admin, createPlace);
 
+
+/**
+ * @swagger
+ * /lugares/sugerencias:
+ *   post:
+ *     summary: Suggest a new place
+ *     tags: [Places]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Place'
+ *     responses:
+ *       201:
+ *         description: Suggestion sent
+ */
 router.route("/sugerencias")
     .post(protect, suggestPlace);
 
+/**
+ * @swagger
+ * /lugares/{id}:
+ *   get:
+ *     summary: Get place by ID
+ *     tags: [Places]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Place details
+ *       404:
+ *         description: Place not found
+ *   put:
+ *     summary: Update a place (Admin only)
+ *     tags: [Places]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Place'
+ *     responses:
+ *       200:
+ *         description: Place updated
+ *   delete:
+ *     summary: Delete/Close a place (Admin only)
+ *     tags: [Places]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Place deleted/closed
+ */
 router.route("/:id")
     .get(getPlaceById)
     .put(protect, admin, updatePlace)
