@@ -22,6 +22,8 @@ Base URL: `/api`
 | Método   | Endpoint               | Descripción                          | Acceso  |
 | -------- | ---------------------- | ------------------------------------ | ------- |
 | `GET`    | `/lugares`             | Listar lugares (filtros: zona, tipo) | Público |
+| `GET`    | `/lugares/mapa`        | Listar lugares para mapa (ligero)    | Público |
+| `GET`    | `/lugares/cercanos`    | Listar lugares cercanos (GPS)        | Público |
 | `POST`   | `/lugares`             | Crear lugar                          | Admin   |
 | `POST`   | `/lugares/sugerencias` | Sugerir nuevo lugar                  | Privado |
 | `GET`    | `/lugares/:id`         | Ver detalles de un lugar             | Público |

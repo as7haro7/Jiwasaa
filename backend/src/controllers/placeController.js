@@ -169,6 +169,7 @@ export const deletePlace = async (req, res) => {
     }
 };
 
+
 // @desc    Sugerir un nuevo lugar (Usuario)
 // @route   POST /api/lugares/sugerencias
 // @access  Private
@@ -201,6 +202,60 @@ export const suggestPlace = async (req, res) => {
 
         const createdPlace = await place.save();
         res.status(201).json({ message: "Sugerencia enviada", place: createdPlace });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Obtener lugares optimizados para mapa (solo ID, nombre, coords, tipo)
+// @route   GET /api/lugares/mapa
+// @access  Public
+export const getMapPlaces = async (req, res) => {
+    try {
+        const places = await Place.find({ estado: "activo" })
+            .select({
+                nombre: 1,
+                tipo: 1,
+                coordenadas: 1,
+                nivelVisibilidad: 1,
+                promedioRating: 1,
+                direccion: 1,
+                zona: 1,
+                fotos: { $slice: 1 } // Only return the first photo (thumbnail)
+            });
+        res.json(places);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Obtener lugares cercanos
+// @route   GET /api/lugares/cercanos?lat=x&lng=y&dist=km
+// @access  Public
+export const getPlacesByProximity = async (req, res) => {
+    try {
+        const { lat, lng, dist } = req.query;
+
+        if (!lat || !lng) {
+            return res.status(400).json({ message: "Latitud y longitud requeridas" });
+        }
+
+        const distanceInMeters = (dist || 1) * 1000; // default 1km
+
+        const places = await Place.find({
+            estado: "activo",
+            coordenadas: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [parseFloat(lng), parseFloat(lat)],
+                    },
+                    $maxDistance: distanceInMeters,
+                },
+            },
+        });
+
+        res.json(places);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

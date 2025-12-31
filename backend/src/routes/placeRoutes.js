@@ -7,6 +7,8 @@ import {
     updatePlace,
     deletePlace,
     suggestPlace,
+    getMapPlaces,
+    getPlacesByProximity,
 } from "../controllers/placeController.js";
 import { protect, admin } from "../middlewares/authMiddleware.js";
 
@@ -79,7 +81,50 @@ router.use("/:lugarId/promociones", promotionRoutes);
  *       401:
  *         description: Not authorized
  */
-router.route("/")
+
+/**
+ * @swagger
+ * /lugares/mapa:
+ *   get:
+ *     summary: Get lightweight place data for map
+ *     tags: [Places]
+ *     responses:
+ *       200:
+ *         description: List of places with coords
+ */
+router.get("/mapa", getMapPlaces);
+
+/**
+ * @swagger
+ * /lugares/cercanos:
+ *   get:
+ *     summary: Get places nearby
+ *     tags: [Places]
+ *     parameters:
+ *       - in: query
+ *         name: lat
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: lng
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: dist
+ *         schema:
+ *           type: number
+ *         description: Distance in km (default 1)
+ *     responses:
+ *       200:
+ *         description: List of nearby places
+ */
+router.get("/cercanos", getPlacesByProximity);
+
+/**
+ * @swagger
+ * /lugares:
     .get(getPlaces)
     .post(protect, admin, createPlace);
 
