@@ -143,9 +143,9 @@ export default function Map({ places, userLocation, radius }: MapProps) {
   
   return (
     <MapContainer
+      key={`${activeCenter[0]}-${activeCenter[1]}-${activeZoom}`} // Force remount on significant change to avoid Leaflet internal errors
       center={activeCenter}
       zoom={activeZoom}
-
       scrollWheelZoom={true}
       className="h-full w-full z-0 rounded-lg"
     >

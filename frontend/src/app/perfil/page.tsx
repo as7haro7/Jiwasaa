@@ -482,7 +482,9 @@ export default function ProfilePage() {
              <CardContent>
                {favorites.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     {favorites.map((fav) => (
+                     {favorites.map((fav) => {
+                        if (!fav.lugar) return null; // Skip if place was deleted
+                        return (
                         <div key={fav._id} className="flex gap-4 p-3 rounded-lg border border-zinc-100 hover:shadow-md transition-shadow cursor-pointer" onClick={() => router.push(`/lugares/${fav.lugar._id}`)}>
                             <div className="h-20 w-20 bg-zinc-200 rounded-md shrink-0 overflow-hidden relative">
                                 {fav.lugar.fotos && fav.lugar.fotos[0] && (
@@ -495,7 +497,8 @@ export default function ProfilePage() {
                                 <p className="text-xs text-zinc-500">{fav.lugar.zona}</p>
                             </div>
                         </div>
-                     ))}
+                        );
+                     })}
                   </div>
                ) : (
                 <div className="h-32 bg-zinc-50 rounded-lg flex items-center justify-center text-zinc-400 text-sm border border-dashed border-zinc-200">
